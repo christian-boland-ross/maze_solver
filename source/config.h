@@ -5,5 +5,6 @@
 #define WINDOW_HEIGHT 800
 
 #define GRID_SIZE 10
+#define CELL_SIZE 200/GRID_SIZE
 
 #endif
