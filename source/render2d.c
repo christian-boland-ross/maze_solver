@@ -1,10 +1,14 @@
 #include "render2d.h"
 #include "config.h"
 #include "graphics.h"
+#include "maze.h"
 
-void drawGrid(void)
+static void drawGrid(void)
 {
     //Grid is always 200x200 pixels, displayed in top left corner of window
+    setColour(white);
+    fillRect(0, 0, GRID_PIXELS, GRID_PIXELS);
+    setColour(black);
     for(int i = 0; i < GRID_SIZE; i++)
     {
         for(int j = 0; j < GRID_SIZE; j++)
@@ -15,4 +19,10 @@ void drawGrid(void)
             drawRect(x, y, CELL_SIZE, CELL_SIZE);
         }
     }
+}
+
+void draw2DWorld(void)
+{
+    drawGrid();
+    drawMaze();
 }
