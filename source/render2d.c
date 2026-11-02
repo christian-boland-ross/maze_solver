@@ -2,6 +2,7 @@
 #include "config.h"
 #include "graphics.h"
 #include "maze.h"
+#include "robot.h"
 
 static void drawGrid(void)
 {
@@ -25,4 +26,5 @@ void draw2DWorld(void)
 {
     drawGrid();
     drawMaze();
+    drawRobot();
 }
