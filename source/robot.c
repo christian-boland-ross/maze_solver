@@ -9,68 +9,19 @@ static int y = 0;
 static int orientation = 1;
 // 0 = north, 1 = east, 2 = south, 3 = west
 
-void drawRobot(void)
+int getRobotX(void)
 {
-    int pixelX = x * CELL_SIZE;
-    int pixelY = y * CELL_SIZE;
+    return x;
+}
 
-    int margin = CELL_SIZE / 10;
+int getRobotY(void)
+{
+    return y;
+}
 
-    int left = pixelX + margin;
-    int right = pixelX + CELL_SIZE - margin;
-    int top = pixelY + margin;
-    int bottom = pixelY + CELL_SIZE - margin;
-
-    int centreX = pixelX + CELL_SIZE / 2;
-    int centreY = pixelY + CELL_SIZE / 2;
-
-    int px[3];
-    int py[3];
-
-    switch (orientation)
-    {
-        case 0: // North
-            px[0] = centreX;
-            py[0] = top;
-            px[1] = right;
-            py[1] = bottom;
-            px[2] = left;
-            py[2] = bottom;
-            break;
-
-        case 1: // East
-            px[0] = right;
-            py[0] = centreY;
-            px[1] = left;
-            py[1] = top;
-            px[2] = left;
-            py[2] = bottom;
-            break;
-
-        case 2: // South
-            px[0] = centreX;
-            py[0] = bottom;
-            px[1] = left;
-            py[1] = top;
-            px[2] = right;
-            py[2] = top;
-            break;
-
-        case 3: // West
-            px[0] = left;
-            py[0] = centreY;
-            px[1] = right;
-            py[1] = bottom;
-            px[2] = right;
-            py[2] = top;
-            break;
-
-        default:
-            return;
-    }
-
-    setColour(red);
-    fillPolygon(3, px, py);
+int getRobotOrientation(void)
+{
+    return orientation;
 }
 
 void forward(void)

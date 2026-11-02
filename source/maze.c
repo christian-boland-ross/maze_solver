@@ -30,29 +30,6 @@ void initialiseMaze(void)
     }
 }
 
-void drawMaze(void)
-{
-    setColour(black);
-    for(int i = 0; i < GRID_SIZE; i++)
-    {
-        for(int j = 0; j < GRID_SIZE; j++)
-        {
-            if(maze[i][j])
-            {
-                int x = j * CELL_SIZE;
-                int y = i * CELL_SIZE;
-
-                fillRect(x, y, CELL_SIZE, CELL_SIZE);
-            }
-        }
-    }
-
-    //top left is always start, bottom right is always finish
-    setColour(green);
-    fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-    fillRect((GRID_SIZE - 1) * CELL_SIZE, (GRID_SIZE - 1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-}
-
 bool isWall(int row, int col)
 {
     if(maze[row][col] || row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
