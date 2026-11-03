@@ -1,6 +1,5 @@
 #include "maze.h"
 #include "config.h"
-#include "graphics.h"
 
 static bool maze[GRID_SIZE][GRID_SIZE];
 

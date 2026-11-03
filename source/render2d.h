@@ -2,5 +2,6 @@
 #define RENDER2D_H
 
 void draw2DWorld(void);
+void drawRobot(void);
 
 #endif

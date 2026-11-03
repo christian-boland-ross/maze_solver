@@ -46,7 +46,7 @@ static void drawMaze(void)
 }
 
 
-static void drawRobot(void)
+void drawRobot(void)
 {
     int pixelX = getRobotX() * CELL_SIZE;
     int pixelY = getRobotY() * CELL_SIZE;
@@ -114,5 +114,4 @@ void draw2DWorld(void)
 {
     drawGrid();
     drawMaze();
-    drawRobot();
 }
