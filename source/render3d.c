@@ -42,7 +42,11 @@ static void drawWalls(void)
 
                 distance *= cos(rayAngle - robotAngle);
 
-                setRGBColour(255 * distance * .2, 255 * distance * 0.1, 255 * distance * .1);
+                double brightness = 255.0 / (1.0 + distance * 0.5);
+                int r = (int)(brightness);
+                int g = (int)(brightness * 0.5);
+                int b = (int)(brightness * 0.5);
+                setRGBColour(r, g, b);
 
                 int wallHeight = (int)(WINDOW_HEIGHT / distance);
                 int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
@@ -60,12 +64,23 @@ static void drawWalls(void)
 
 static void drawSky(void)
 {
-    setColour(blue);
-    fillRect(0,0, WINDOW_WIDTH, WINDOW_HEIGHT/2);
+    for(int i = 0; i < WINDOW_HEIGHT/2; i++)
+    {
+        int r = 135 + (120 * i / (WINDOW_HEIGHT/2));
+        int g = 205 + (50 * i / (WINDOW_HEIGHT/2));
+        int b = 235 + (20 * i / (WINDOW_HEIGHT/2));
+        setRGBColour(r, g, b);
+        drawLine(0, i, WINDOW_WIDTH, i);
+    }
 }
 
 static void drawGround(void)
 {
-    setColour(green);
-    fillRect(0,WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT/2);
+    for(int i = WINDOW_HEIGHT/2; i < WINDOW_HEIGHT; i++)
+    {
+        int shade = 20 + (80 * (i - WINDOW_HEIGHT/2) / (WINDOW_HEIGHT/2));
+
+        setRGBColour(shade, shade, shade);
+        drawLine(0, i, WINDOW_WIDTH, i);
+    }
 }
