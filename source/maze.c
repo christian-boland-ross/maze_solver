@@ -31,12 +31,5 @@ void initialiseMaze(void)
 
 bool isWall(int row, int col)
 {
-    if(maze[row][col] || row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE || maze[row][col];
 }
