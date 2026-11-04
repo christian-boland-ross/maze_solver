@@ -31,9 +31,16 @@ As according to the [CCoursework specification](CCoursework.pdf)
 ## 3D maze
 TO-DO:
 - [x] Draw floor and sky
-- [ ] Determine visible walls
-- [ ] Draw visible walls
+- [x] Determine visible walls
+- [x] Draw visible walls
 - [ ] Lighting? <!-- Torch and simulate light falloff? or fog? multiple worlds? -->
+
+### Column based ray-casting approach
+Cast a ray from the player's position.
+Find the first wall the ray intersects.
+Calculate the distance to that wall.
+Calculate how tall that wall should appear.
+Draw a vertical strip of pixels.
 
 ## Maze Searcher
 TO_DO:
