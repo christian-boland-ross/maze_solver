@@ -4,6 +4,7 @@ CFLAGS = -Wall -Wextra -g
 
 SRC_DIR = source
 GRAPHICS_DIR = graphics
+INCLUDE_DIR = include
 
 SOURCES = $(wildcard $(SRC_DIR)/*.c) $(GRAPHICS_DIR)/graphics.c
 
@@ -14,7 +15,7 @@ TARGET = maze
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	$(CC) $(CFLAGS) -I$(GRAPHICS_DIR) -I$(SRC_DIR) $(SOURCES) -o $(TARGET)
+	$(CC) $(CFLAGS) -I$(GRAPHICS_DIR) -I$(INCLUDE_DIR) $(SOURCES) -o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET) | java -jar $(GRAPHICS_DIR)/drawapp-5.0.jar
