@@ -23,6 +23,41 @@ int getRobotOrientation(void)
     return orientation;
 }
 
+//wall following maze solver algorithm
+void updateRobot(void)
+{
+    right();
+
+    if (canMoveForward())
+    {
+        forward();
+    }
+    else
+    {
+        left();
+
+        if (canMoveForward())
+        {
+            forward();
+        }
+        else
+        {
+            // Try turning left
+            left();
+
+            if (canMoveForward())
+            {
+                forward();
+            }
+            else
+            {
+                // Dead end: turn around
+                left();
+            }
+        }
+    }
+}
+
 void forward(void)
 {
     if(canMoveForward()) 
@@ -49,8 +84,8 @@ void right(void)
 
 bool atMarker(void)
 {
-    return true;
-} // return true if the robot is on the exit marker, otherwise false.
+    return x == GRID_SIZE - 1 && y == GRID_SIZE - 1;
+}
 
 bool canMoveForward(void) 
 {
