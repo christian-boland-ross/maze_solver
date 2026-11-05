@@ -46,3 +46,8 @@ double cos(double angle) // takes radians
 
     return result;
 }
+
+double absolute(double n)
+{
+    return (n < 0) ? -n : n;
+}
