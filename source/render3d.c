@@ -8,6 +8,7 @@
 static void drawWalls(void);
 static void drawSky(void);
 static void drawGround(void);
+static void drawColumn(double distance, int x, bool side);
 
 void draw3DWorld(void)
 {
@@ -20,6 +21,7 @@ static void drawWalls(void)
 {
     double angleIncrement = FOV * PI/180 / WINDOW_WIDTH;
     double robotAngle = getRobotOrientation() * PI / 2.0 - PI/2.0;
+    double rayAngle = robotAngle - FOV * PI/180 / 2.0;
 
     double robotX = getRobotX() + 0.5; // the + 0.5 starts ray at the center of the robot's square
     double robotY = getRobotY() + 0.5;
@@ -28,43 +30,86 @@ static void drawWalls(void)
     while(x < WINDOW_WIDTH)
     {
         x++;
-        double rayAngle = robotAngle - FOV * PI/180 / 2.0 + (x) * angleIncrement;
         
-        double rayX = robotX;
-        double rayY = robotY;
+        double rayDirX = cos(rayAngle);
+        double rayDirY = sin(rayAngle);
 
-        while(true)
+        double deltaDistX = (rayDirX == 0) ? 1e30 : absolute(1.0 / rayDirX); // avoid division by zero
+        double deltaDistY = (rayDirY == 0) ? 1e30 : absolute(1.0 / rayDirY);
+
+        int stepX = (rayDirX < 0) ? -1 : 1;
+        int stepY = (rayDirY < 0) ? -1 : 1;
+
+        int mapX = getRobotX();
+        int mapY = getRobotY();
+
+        double sideDistX;
+        double sideDistY;
+
+        if(stepX < 0)
+            sideDistX = (robotX - mapX) * deltaDistX;
+        else
+            sideDistX = (mapX + 1.0 - robotX) * deltaDistX;
+
+        if(stepY < 0)
+            sideDistY = (robotY - mapY) * deltaDistY;
+        else
+            sideDistY = (mapY + 1.0 - robotY) * deltaDistY;
+
+        bool side; // 0 for vertical, 1 for horizontal
+
+        // DDA algorithm: https://lodev.org/cgtutor/raycasting.html
+        while(!isWall(mapY, mapX))
         {
-            if(isWall((int)rayY, (int)rayX))
+            if(sideDistX < sideDistY)
             {
-                double distance = sqrt(
-                    (rayX - robotX) * (rayX - robotX) +
-                    (rayY - robotY) * (rayY - robotY)
-                );
-                if(distance < 0.01) distance = 0.01;
-
-                //correct the distance for the fish-eye effect
-                distance *= cos(rayAngle - robotAngle);
-
-                //calculate brightness based on distance
-                double brightness = 255.0 / (1.0 + distance * 0.5);
-                int r = (int)(brightness);
-                int g = (int)(brightness * 0.5);
-                int b = (int)(brightness * 0.5);
-                setRGBColour(r, g, b);
-
-                int wallHeight = (int)(WINDOW_HEIGHT / distance);
-                int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
-                int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
-                drawLine(x, wallTop, x, wallBottom);
-
-                break;
+                sideDistX += deltaDistX;
+                mapX += stepX;
+                side = 0;
             }
-
-            rayX += cos(rayAngle) * 0.01;
-            rayY += sin(rayAngle) * 0.01;
+            else
+            {
+                sideDistY += deltaDistY;
+                mapY += stepY;
+                side = 1;
+            }
         }
+
+        double distance;
+        if(side == 0)
+            distance = sideDistX - deltaDistX;
+        else
+            distance = sideDistY - deltaDistY;
+
+        //correct the distance for the fish-eye effect
+        distance *= cos(rayAngle - robotAngle);
+
+        drawColumn(distance, x, side);
+
+        rayAngle += angleIncrement;
     }
+}
+
+static void drawColumn(double distance, int x, bool side)
+{
+    if(distance < 0.01)
+        distance = 0.01;
+
+    //calculate brightness based on distance
+    double brightness = 255.0 / (1.0 + distance * 0.5);
+
+    if(side == 1)
+        brightness *= 0.7;
+
+    int r = (int)(brightness);
+    int g = (int)(brightness * 0.5);
+    int b = (int)(brightness * 0.5);
+    setRGBColour(r, g, b);
+
+    int wallHeight = (int)(WINDOW_HEIGHT / distance);
+    int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
+    int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
+    drawLine(x, wallTop, x, wallBottom);
 }
 
 static void drawSky(void)
